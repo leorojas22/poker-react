@@ -1,28 +1,82 @@
-.App {
-  text-align: center;
+html, body {
+	min-height: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+body {
+	font-family: 'Lato', arial, sans-serif;
+	background: linear-gradient(#1c1c1c 25%, #2f2f2f 5%, #2f2f2f 100%);
+	color: white;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+a {
+	color: #0090ff;
 }
 
-.App-title {
-  font-size: 1.5em;
+a:hover {
+	color: #007ad8;
+	text-decoration: none;
 }
 
-.App-intro {
-  font-size: large;
+header {
+	position: relative;
+	background-color: #006c03;
+	border-bottom: solid #008304 1px;
+	box-shadow: 0px 0px 15px 3px rgba(0,0,0,.5);
+	text-align: center;
+	font-weight: 900;
+	font-size: 36px;
+	padding: 25px 0px;
+	width: 100%;
+	text-transform: uppercase;
+	z-index: 20;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.main-container {
+	background-color: #212121;
+	border: solid #363636 1px;
+	border-top: 0px;
+	padding: 20px;
+	z-index: 10;
+	box-shadow: 0px 0px 25px 3px rgba(0,0,0,.2);
+	min-height: 400px;
+}
+
+.logged-out-form {
+	position: relative;
+	width: 40%;
+	margin: auto;
+	font-size: 18px;
+}
+
+.logged-out-form h1 {
+	font-size: 24px;
+	font-weight: 900;
+	text-transform: uppercase;
+	text-align: center;
+	padding-top: 30px;
+	padding-bottom: 10px;
+}
+
+.form-control {
+	border-radius: 0px;
+	box-shadow: 0px 0px 15px 3px rgba(255,255,255,.2);
+	font-size: 18px;
+}
+
+.btn {
+	border-radius: 0px;
+	font-size: 24px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.btn-primary {
+	background-color: #006c03;
+	border: solid #004c02 1px;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle,
+.btn-primary:hover {
+	background-color: #015a03;
+	border: solid #004202 1px;
 }
