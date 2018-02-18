@@ -74,7 +74,6 @@ class ResetCode extends BaseModel {
 		});
 	}
 
-	// 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
 	toJson() {
 
 		var user = this.user;
