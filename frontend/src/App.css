@@ -80,3 +80,11 @@ header {
 	background-color: #015a03;
 	border: solid #004202 1px;
 }
+
+.alert p {
+	margin-bottom: 0px;
+}
+
+.alert-danger {
+	color: #ff0018;
+}

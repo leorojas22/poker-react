@@ -31,7 +31,7 @@ class CrudController extends BaseController {
 	}
 
 	create() {
-		var writeData = this.req.query;
+		var writeData = this.req.body;
 
 		if(this.filterByUser) {
 			writeData.user = this.req.user._id;
@@ -43,6 +43,32 @@ class CrudController extends BaseController {
 		.catch((err) => {
 			return this.respond(false, err);
 		})
+
+	}
+
+	read() {
+		var self = this;
+		var searchData = this.req.query;
+
+		if(this.filterByUser) {
+			searchData.user = this.req.user._id;
+		}
+
+		return this.Model.search(searchData).then((models) => {
+			var filteredModels = models.map((model, index) => {
+				return model.toJson();
+			});
+
+			if(typeof searchData.id !== 'undefined') {
+				// Return single object instead of array when searching by id
+				filteredModels = filteredModels.shift();
+			}
+
+			return self.respond(true, filteredModels);
+		})
+		.catch(err => {
+			return self.respond(false, err);
+		});
 
 	}
 

@@ -1,5 +1,5 @@
 const moment = require("moment");
-
+const mongoose = require(process.cwd() + "/db.js");
 class BaseModel {
 
 	static create(data) {
@@ -34,34 +34,40 @@ class BaseModel {
 		return {};
 	}
 
-	static search(where) {
+	static search(searchValues) {
 		var searchableProperties = this.searchableProperties();
-		if(typeof where.date !== 'undefined' && searchableProperties.indexOf("created") !== -1) {
-			var dayStart 	= moment(where.date).startOf("day");
-			var dayEnd 		= moment(where.date).endOf("day");
+		var where = {};
+
+		if(typeof searchValues.id !== 'undefined' && mongoose.Types.ObjectId.isValid(searchValues.id)) {
+			where._id = searchValues.id;
+		}
+		else if(typeof searchValues.id !== 'undefined' && !mongoose.Types.ObjectId.isValid(searchValues.id)) {
+			return Promise.reject("Invalid object id.");
+		}
+
+		if(typeof searchValues.date !== 'undefined' && searchableProperties.indexOf("created") !== -1) {
+			var dayStart 	= moment(searchValues.date).startOf("day");
+			var dayEnd 		= moment(searchValues.date).endOf("day");
 			where['created'] = {
 				"$gte": dayStart.toDate(),
 				"$lte": dayEnd.toDate()
 			}
-
-			delete where.date;
-		}
-		else {
-			console.log("no date");
 		}
 
-		console.log(where);
-
-		
 		var orderBy = false;
-		if(typeof where.orderBy !== 'undefined') {
-			orderBy = where.orderBy;
-			delete where.orderBy;
+		if(typeof searchValues.orderBy !== 'undefined') {
+			orderBy = searchValues.orderBy;
+		}
+
+		for(var x in searchableProperties) {
+			var property = searchableProperties[x];
+			if(typeof searchValues[property] !== 'undefined') {
+				where[property] = searchValues[property];
+			}
 		}
 
 		var returnVal = this.find(where);
 		if(orderBy) {
-			console.log(orderBy);
 			returnVal.sort(orderBy);
 		}
 		else {

@@ -132,7 +132,7 @@ class User extends BaseModel {
 	}
 
 	setJWTCookie(res) {
-		res.cookie("access_token", this.getJWT(), { httpOnly: true, expires: new Date(Date.now() + (1000*60*60*24*30)), domain: 'workoutlog.com' });
+		res.cookie("access_token", this.getJWT(), { httpOnly: true, expires: new Date(Date.now() + (1000*60*60*24*30)), domain: 'pokertournament.com' });
 	}
 
 	static verifyJWT(token) {

@@ -1,3 +1,5 @@
+const API_URL = "http://api.pokertournament.com";
+
 export const ajaxHelper = (url, options) => {
 
 	if(typeof options.credentials === 'undefined') {
