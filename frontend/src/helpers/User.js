@@ -32,6 +32,19 @@ class User {
 			return Promise.reject(errors);
 		})
 	}
+
+	static isLoggedIn() {
+		return ajaxHelper("/user/status", {
+			method: 'POST',
+			body: {}
+		})
+		.then(result => {
+			return Promise.resolve(true);
+		})
+		.catch(err => {
+			return Promise.resolve(false);
+		});
+	}
 }
 
 export default User;
