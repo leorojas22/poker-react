@@ -17,7 +17,7 @@ class CrudController extends BaseController {
 			this.Model = modelList[this.modelKey];
 		}
 		else {
-			throw new Error("Invalid model name");
+			throw new Error("Invalid model name: "+this.modelKey);
 		}
 
 		if(typeof this.Model.schema.paths.user !== 'undefined') {

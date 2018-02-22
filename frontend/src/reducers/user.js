@@ -30,47 +30,9 @@ export function handleFormInputReducer(fieldName) {
 	}
 }
 
-export function userSignUpFormInput(state = "", action) {
-	switch(action.type) {
-		case 'USER_SIGNUP_FORM_INPUT':
-			console.log(action.field.target.value);
-			return action.field.target.value;
-		default:
-			return state;
-	}
-}
-
-export function userSignUpEnterEmail(state = "", action) {
-	switch(action.type) {
-		case 'USER_SIGNUP_EMAIL':
-			return action.email.target.value;
-		default:
-			return state;
-	}
-}
-
-
-export function userSignUpEnterPassword(state = "", action) {
-	switch(action.type) {
-		case 'USER_SIGNUP_PASSWORD':
-			return action.password.target.value;
-		default:
-			return state;
-	}
-}
-
-export function userSignUpEnterConfirmPassword(state = "", action) {
-	switch(action.type) {
-		case 'USER_SIGNUP_CONFIRM_PASSWORD':
-			return action.confirmPassword.target.value;
-		default:
-			return state;
-	}
-}
-
-
 export function user(state = false, action) {
 	switch(action.type) {
+		case 'USER_LOGGED_IN':
 		case 'USER_SIGNUP_COMPLETE':
 			return action.user;
 		default:

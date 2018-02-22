@@ -7,6 +7,12 @@ export function userSignUpError(errors) {
 	}
 }
 
+export function userLoggedIn(user) {
+	return {
+		type: 'USER_LOGGED_IN',
+		user
+	}
+}
 
 export function userSignUpProcessing(status) {
 	return {
@@ -45,11 +51,30 @@ export function userSignUpConfirmPassword(confirmPassword) {
 	}
 }
 
+export function userLoginError(errors) {
+	return {
+		type: 'USER_LOGIN_ERROR',
+		errors
+	}
+}
+
 export function userSignUpHandleInput(field) {
 	return {
 		type: 'USER_SIGNUP_FORM_INPUT',
 		name: field.target.name,
 		value: field.target.value
+	}
+}
+
+export function userLogin(email, password) {
+	return (dispatch) => {
+		User.login(email, password).then(user => {
+			return dispatch(userLoggedIn(user));
+		})
+		.catch(err => {
+			dispatch(userLoggedIn(false));
+			return dispatch(userLoginError(err));
+		});
 	}
 }
 
@@ -60,7 +85,8 @@ export function userSignUp(obj) {
 
 		User.create(obj).then(user => {
 			dispatch(userSignUpProcessing(false));
-			return dispatch(userSignUpComplete(user));
+			dispatch(userSignUpComplete(user));
+			return userLogin(obj.email, obj.password);
 		})
 		.catch(err => {
 			return dispatch(userSignUpError(err));

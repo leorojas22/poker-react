@@ -8,7 +8,7 @@ module.exports = (app) => {
 		return userController.login();
 	});
 
-	app.get("/:modelName", (req, res) => {		
+	app.get("/model/:modelName", (req, res) => {		
 
 		var modelName = req.params.modelName;
 		try {
@@ -25,7 +25,7 @@ module.exports = (app) => {
 
 	});
 
-	app.post("/:modelName", (req, res) => {
+	app.post("/model/:modelName", (req, res) => {
 		var modelName = req.params.modelName;
 		try {
 			var crudController = new CrudController(req, res, {
