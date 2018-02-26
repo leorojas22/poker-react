@@ -1,13 +1,22 @@
 const CrudController = require(process.cwd() + "/controllers/CrudController.js");
 const UserController = require(process.cwd() + "/controllers/UserController.js");
+const verifyJWTMiddleware = require(process.cwd() + "/middleware/verifyJWT.js");
+
 
 module.exports = (app) => {
 
-	app.get("/user/login", (req, res) => {
+	app.post("/model/user/login", (req, res) => {
 		var userController = new UserController(req, res);
 		return userController.login();
 	});
 
+	app.use("/model/user/status", verifyJWTMiddleware);
+	app.get("/model/user/status", (req, res) => {
+		// If it gets past the middleware, we are logged in
+		return res.json({ result: true, user: req.user.toJson() });
+	});
+
+	app.use("/model/:modelName", verifyJWTMiddleware);
 	app.get("/model/:modelName", (req, res) => {		
 
 		var modelName = req.params.modelName;

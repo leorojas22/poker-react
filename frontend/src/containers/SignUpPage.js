@@ -8,7 +8,8 @@ import { ajaxHelper } from '../helpers/ajax';
 import User from '../helpers/User';
 
 import { connect } from 'react-redux';
-import { userSignUp, userSignUpHandleInput, userSignUpEmail, userSignUpPassword, userSignUpConfirmPassword } from '../actions/user';
+import { handleFormInput } from '../actions/forminput';
+import { userSignUp, userSignUpEmail, userSignUpPassword, userSignUpConfirmPassword } from '../actions/user';
 
 class SignUpPage extends React.Component {
 
@@ -26,55 +27,6 @@ class SignUpPage extends React.Component {
 			confirmPassword	: this.props.confirmPassword
 		});
 	}
-
-	/*
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			email: "",
-			password: "",
-			confirmPassword: "",
-			errors: []
-		}
-
-		this.handleInput = this.handleInput.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
-
-	handleInput(e) {
-		var target = e.target;
-		console.log(target.name);
-
-		var newState = {};
-		newState[target.name] = target.value;
-
-		this.setState(newState);
-	}
-
-	handleSubmit(e) {
-		var self = this;
-
-		this.setState({
-			errors: []
-		});
-
-		User.create({
-			email			: self.state.email,
-			password		: self.state.password,
-			confirmPassword	: self.state.confirmPassword
-		})
-		.then(result => {
-			console.log(result);
-		})
-		.catch(err => {
-			this.setState({
-				errors: err
-			});
-		});
-		
-	}
-	*/
 
 	render() {
 
@@ -125,9 +77,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		userEnterEmail: (field) => dispatch(userSignUpHandleInput(field)),
-		userEnterPassword: (field) => dispatch(userSignUpHandleInput(field)),
-		userEnterConfirmPassword: (field) => dispatch(userSignUpHandleInput(field)),
+		userEnterEmail: (field) => dispatch(handleFormInput(field)),
+		userEnterPassword: (field) => dispatch(handleFormInput(field)),
+		userEnterConfirmPassword: (field) => dispatch(handleFormInput(field)),
 		userSignUp: (obj) => dispatch(userSignUp(obj))
 	}
 }

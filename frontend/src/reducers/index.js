@@ -4,31 +4,31 @@ import {
 	user, 
 	userSignUpHasErrors, 
 	userSignUpIsProcessing,
-	userSignUpEnterEmail,
-	userSignUpEnterPassword,
-	userSignUpEnterConfirmPassword,
-	handleFormInputReducer
+	userLoginHasErrors,
+	userLoggedInChecked
 } from './user';
 
-var signUpPageState = {
-	email: handleFormInputReducer("email"),
-	password: handleFormInputReducer("password"),
-	confirmPassword: handleFormInputReducer("confirmPassword"),
-	errors: userSignUpHasErrors,
-	processing: userSignUpIsProcessing
-}
+import { handleFormInputReducer } from './forminput';
 
-console.log(signUpPageState);
+var signUpPageState = combineReducers({
+	email			: handleFormInputReducer("email"),
+	password		: handleFormInputReducer("password"),
+	confirmPassword	: handleFormInputReducer("confirmPassword"),
+	errors			: userSignUpHasErrors,
+	processing		: userSignUpIsProcessing
+});
+
+var loginPageState = combineReducers({
+	email		: handleFormInputReducer("email"),
+	password	: handleFormInputReducer("password"),
+	errors		: userLoginHasErrors
+});
 
 export default combineReducers({
 	user,
-	signUpPage: combineReducers({
-		email: handleFormInputReducer("email"),
-		password: handleFormInputReducer("password"),
-		confirmPassword: handleFormInputReducer("confirmPassword"),
-		errors: userSignUpHasErrors,
-		processing: userSignUpIsProcessing
-	})
+	loginChecked: userLoggedInChecked,
+	signUpPage: signUpPageState,
+	loginPage: loginPageState
 	/*
 	userSignUpHasErrors,
 	userSignUpIsProcessing,

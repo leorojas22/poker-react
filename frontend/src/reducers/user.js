@@ -16,17 +16,23 @@ export function userSignUpIsProcessing(state = false, action) {
 	}
 }
 
-export function handleFormInputReducer(fieldName) {
-	return (state = "", action) => {
-		switch(action.type) {
-			case 'USER_SIGNUP_FORM_INPUT':
-				if(action.name == fieldName) {
-					
-					return action.value;
-				}
-			default:
-				return state;
-		}
+export function userLoggedInChecked(state = false, action) {
+	switch(action.type) {
+		case 'USER_LOGGEDIN_CHECKED':
+			console.log("TESTING@####");
+			console.log(action.checked);
+			return action.checked;
+		default: 
+			return state;
+	}
+}
+
+export function userLoginHasErrors(state = [] , action) {
+	switch(action.type) {
+		case 'USER_LOGIN_ERROR':
+			return action.errors;
+		default:
+			return state;
 	}
 }
 

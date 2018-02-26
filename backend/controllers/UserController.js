@@ -4,7 +4,7 @@ const User 				= require(process.cwd() + "/models/User.js");
 class UserController extends BaseController {
 	 
 	login() {
-		var loginData = this.req.query;
+		var loginData = this.req.body;
 		var self = this;
 
 		return User.authenticate(loginData.email, loginData.password).then(user => {
@@ -15,6 +15,7 @@ class UserController extends BaseController {
 			return self.respond(false, err);
 		});
 	}
+	
 
 }
 

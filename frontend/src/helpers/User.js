@@ -3,7 +3,7 @@ import parseError from './parseError';
 
 class User {
 	static create(obj) {
-		return ajaxHelper("/user", {
+		return ajaxHelper("/model/user", {
 			method: 'POST',
 			body: {
 				email			: obj.email,
@@ -19,7 +19,7 @@ class User {
 	}
 
 	static login(email, password) {
-		return ajaxHelper("/user/login", {
+		return ajaxHelper("/model/user/login", {
 			method: 'POST',
 			body: {
 				email		: email,
@@ -34,15 +34,12 @@ class User {
 	}
 
 	static isLoggedIn() {
-		return ajaxHelper("/user/status", {
-			method: 'POST',
+		return ajaxHelper("/model/user/status", {
+			method: 'GET',
 			body: {}
 		})
-		.then(result => {
-			return Promise.resolve(true);
-		})
 		.catch(err => {
-			return Promise.resolve(false);
+			return Promise.reject(false);
 		});
 	}
 }

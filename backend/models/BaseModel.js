@@ -3,7 +3,16 @@ const mongoose = require(process.cwd() + "/db.js");
 class BaseModel {
 
 	static create(data) {
-		var model = new this(data);
+		var writeData = {};
+		var searchableProperties = this.settableProperties();
+		for(var property in searchableProperties) {
+			if(typeof data[property] !== 'undefined') {
+				writeData[property] = data[property];
+			}
+		}
+
+
+		var model = new this(writeData);
 		return model.save();
 	}
 
@@ -91,6 +100,10 @@ class BaseModel {
 
 	static displayName() {
 		return "";
+	}
+
+	afterCreateHook(req, res) {
+		
 	}
 
 }

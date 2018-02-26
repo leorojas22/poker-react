@@ -3,6 +3,7 @@ const BaseController = require(process.cwd() + "/controllers/BaseController.js")
 
 const modelList = {
 	user: require(process.cwd() + "/models/User.js"),
+	tournament: require(process.cwd() + "/models/Tournament.js")
 };
 
 class CrudController extends BaseController {
@@ -38,6 +39,7 @@ class CrudController extends BaseController {
 		}
 	
 		return this.Model.create(writeData).then((model) => {
+			model.afterCreateHook(this.req, this.res);
 			return this.respond(true, model.toJson());
 		})
 		.catch((err) => {

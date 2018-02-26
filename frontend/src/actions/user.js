@@ -66,12 +66,23 @@ export function userSignUpHandleInput(field) {
 	}
 }
 
+export function userLoggedInChecked(checked) {
+	console.log("CHECKED");
+	console.log(checked);
+	return {
+		type: 'USER_LOGGEDIN_CHECKED',
+		checked: checked
+	}
+}
+
 export function userLogin(email, password) {
 	return (dispatch) => {
+		dispatch(userLoginError([]));
 		User.login(email, password).then(user => {
 			return dispatch(userLoggedIn(user));
 		})
 		.catch(err => {
+			console.log(err);
 			dispatch(userLoggedIn(false));
 			return dispatch(userLoginError(err));
 		});
@@ -92,5 +103,18 @@ export function userSignUp(obj) {
 			return dispatch(userSignUpError(err));
 		});
 
+	}
+}
+
+export function checkLoggedIn() {
+	return (dispatch) => {
+		User.isLoggedIn().then(result => {
+			dispatch(userLoggedInChecked(true));
+			return dispatch(userLoggedIn(result.user));
+		})
+		.catch(err => {
+			dispatch(userLoggedInChecked(true));
+			return dispatch(userLoggedIn(false));
+		})
 	}
 }

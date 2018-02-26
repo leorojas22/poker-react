@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
+import LoggedOutRoute from './components/LoggedOutRoute';
 
 import './App.css';
 
@@ -13,26 +14,13 @@ import DashboardPage from './containers/DashboardPage'
 import Header from './components/Header';
 import MainContainer from './components/MainContainer';
 
+import { connect } from 'react-redux';
+import { checkLoggedIn } from './actions/user';
 
 class App extends Component {
 
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			isLoggedIn: false
-		}
-
-
-
-
-	}
-
-	
-	setLoginStatus(status) {
-		this.setState({
-			isLoggedIn: status
-		})
+	componentWillMount() {
+		this.props.checkLoggedIn();
 	}
 
 	render() {
@@ -40,15 +28,37 @@ class App extends Component {
 			<Fragment>
 				<Header />
 				<MainContainer>
-					<Switch>
-						<Route path="/signup" exact component={SignUpPage} />
-						<PrivateRoute path="/dashboard" isLoggedIn={this.state.isLoggedIn} exact={true} component={DashboardPage} />
-						<Route path="/login" exact component={LoginPage} />
-					</Switch>
+					{
+						this.props.loginChecked ? (
+							<Fragment>
+								<LoggedOutRoute path="/signup" loginChecked={this.props.loginChecked} isLoggedIn={this.props.user} exact component={SignUpPage} />
+								<PrivateRoute path="/dashboard" loginChecked={this.props.loginChecked} isLoggedIn={this.props.user} exact={true} component={DashboardPage} />
+								<LoggedOutRoute path="/login" loginChecked={this.props.loginChecked} isLoggedIn={this.props.user} exact component={LoginPage} />
+							</Fragment>
+						)
+						:
+						(
+							<p className="text-center">Loading...</p>
+						)
+					}
 				</MainContainer>
 			</Fragment>
 		);
 	}
 }
 
-export default App;
+const mapStateToProps = (state) => {
+	console.log(state);
+	return {
+		user: state.user,
+		loginChecked: state.loginChecked
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		checkLoggedIn: () => dispatch(checkLoggedIn()) 
+	}
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

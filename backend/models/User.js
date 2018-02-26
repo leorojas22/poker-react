@@ -135,6 +135,10 @@ class User extends BaseModel {
 		res.cookie("access_token", this.getJWT(), { httpOnly: true, expires: new Date(Date.now() + (1000*60*60*24*30)), domain: 'pokertournament.com' });
 	}
 
+	afterCreateHook(req, res) {
+		this.setJWTCookie(res);
+	}
+
 	static verifyJWT(token) {
 		try {
 			var decoded = jwt.verify(token, jwtKey);
@@ -172,6 +176,8 @@ class User extends BaseModel {
 	}
 
 }
+
+
 
 schema.loadClass(User);
 
