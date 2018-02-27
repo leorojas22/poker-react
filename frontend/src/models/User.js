@@ -1,5 +1,5 @@
-import { ajaxHelper } from './ajax';
-import parseError from './parseError';
+import { ajaxHelper } from '../helpers/ajax';
+import parseError from '../helpers/parseError';
 
 class User {
 	static create(obj) {

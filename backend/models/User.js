@@ -79,7 +79,7 @@ class User extends BaseModel {
 	}
 
 	static searchableProperties() {
-		return ['email'];
+		return ['email', 'created'];
 	}
 
 	static settableProperties() {

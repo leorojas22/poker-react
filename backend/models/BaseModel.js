@@ -55,11 +55,14 @@ class BaseModel {
 		}
 
 		if(typeof searchValues.date !== 'undefined' && searchableProperties.indexOf("created") !== -1) {
-			var dayStart 	= moment(searchValues.date).startOf("day");
-			var dayEnd 		= moment(searchValues.date).endOf("day");
+			console.log(moment(searchValues.date).toDate());
+			console.log(new Date());
+			var dayStart 	= moment(searchValues.date).utc().startOf("day");
+			var dayEnd 		= moment(searchValues.date).utc().endOf("day");
+
 			where['created'] = {
-				"$gte": dayStart.toDate(),
-				"$lte": dayEnd.toDate()
+				$gte: dayStart.toDate(),
+				$lte: dayEnd.toDate()
 			}
 		}
 
@@ -75,6 +78,7 @@ class BaseModel {
 			}
 		}
 
+		console.log(where);
 		var returnVal = this.find(where);
 		if(orderBy) {
 			returnVal.sort(orderBy);

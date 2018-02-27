@@ -1,4 +1,4 @@
-import User from '../helpers/User.js';
+import User from '../models/User.js';
 
 export function userSignUpError(errors) {
 	return {
@@ -109,12 +109,12 @@ export function userSignUp(obj) {
 export function checkLoggedIn() {
 	return (dispatch) => {
 		User.isLoggedIn().then(result => {
-			dispatch(userLoggedInChecked(true));
-			return dispatch(userLoggedIn(result.user));
+			dispatch(userLoggedIn(result.user));
+			return dispatch(userLoggedInChecked(true));
 		})
 		.catch(err => {
-			dispatch(userLoggedInChecked(true));
-			return dispatch(userLoggedIn(false));
+			dispatch(userLoggedIn(false));
+			return dispatch(userLoggedInChecked(true)); 
 		})
 	}
 }

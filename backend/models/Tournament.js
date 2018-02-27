@@ -8,6 +8,10 @@ const schema = new mongoose.Schema({
 		ref: 'User',
 		required: [true, 'User is required.']
 	},
+	name: {
+		type: String,
+		required: [true, 'Tournament name required.']
+	},
 	starting_chips: { 
 		type: Number,
 		min: [0, 'Negative starting chips is not allowed.']

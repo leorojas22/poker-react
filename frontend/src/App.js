@@ -8,8 +8,9 @@ import './App.css';
 
 import SignUpPage from './containers/SignUpPage'
 import LoginPage from './containers/LoginPage'
-import DashboardPage from './containers/DashboardPage'
 
+import TournamentListPage from './containers/tournaments/TournamentListPage'
+import CreateTournamentPage from './containers/tournaments/CreateTournamentPage'
 
 import Header from './components/Header';
 import MainContainer from './components/MainContainer';
@@ -32,8 +33,23 @@ class App extends Component {
 						this.props.loginChecked ? (
 							<Fragment>
 								<LoggedOutRoute path="/signup" loginChecked={this.props.loginChecked} isLoggedIn={this.props.user} exact component={SignUpPage} />
-								<PrivateRoute path="/dashboard" loginChecked={this.props.loginChecked} isLoggedIn={this.props.user} exact={true} component={DashboardPage} />
 								<LoggedOutRoute path="/login" loginChecked={this.props.loginChecked} isLoggedIn={this.props.user} exact component={LoginPage} />
+								<PrivateRoute 
+									path="/tournaments" 
+									loginChecked={this.props.loginChecked} 
+									isLoggedIn={this.props.user} 
+									exact={true} 
+									component={TournamentListPage} 
+								/>
+								<PrivateRoute 
+									path="/tournaments/create" 
+									loginChecked={this.props.loginChecked} 
+									isLoggedIn={this.props.user} 
+									exact={true} 
+									component={CreateTournamentPage} 
+								/>
+
+								
 							</Fragment>
 						)
 						:

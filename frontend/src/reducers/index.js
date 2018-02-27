@@ -10,6 +10,11 @@ import {
 
 import { handleFormInputReducer } from './forminput';
 
+import {
+	tournamentListLoading,
+	tournamentList
+} from './tournament';
+
 var signUpPageState = combineReducers({
 	email			: handleFormInputReducer("email"),
 	password		: handleFormInputReducer("password"),
@@ -24,11 +29,17 @@ var loginPageState = combineReducers({
 	errors		: userLoginHasErrors
 });
 
+var tournamentsState = combineReducers({
+	listLoading	: tournamentListLoading,
+	list		: tournamentList
+});
+
 export default combineReducers({
 	user,
 	loginChecked: userLoggedInChecked,
 	signUpPage: signUpPageState,
-	loginPage: loginPageState
+	loginPage: loginPageState,
+	tournaments: tournamentsState
 	/*
 	userSignUpHasErrors,
 	userSignUpIsProcessing,

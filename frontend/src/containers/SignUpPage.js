@@ -5,8 +5,6 @@ import FormGroup from '../components/FormGroup';
 
 import { ajaxHelper } from '../helpers/ajax';
 
-import User from '../helpers/User';
-
 import { connect } from 'react-redux';
 import { handleFormInput } from '../actions/forminput';
 import { userSignUp, userSignUpEmail, userSignUpPassword, userSignUpConfirmPassword } from '../actions/user';

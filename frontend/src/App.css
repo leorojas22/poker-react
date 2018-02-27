@@ -17,6 +17,15 @@ a:hover {
 	text-decoration: none;
 }
 
+h1.page-title {
+	font-size: 24px;
+	font-weight: 900;
+	text-transform: uppercase;
+	text-align: center;
+	padding-top: 30px;
+	padding-bottom: 10px;
+}
+
 header {
 	position: relative;
 	background-color: #006c03;
@@ -30,6 +39,7 @@ header {
 	text-transform: uppercase;
 	z-index: 20;
 }
+
 
 .main-container {
 	background-color: #212121;
@@ -68,6 +78,8 @@ header {
 	font-size: 24px;
 	font-weight: bold;
 	text-transform: uppercase;
+	padding-left: 30px;
+	padding-right: 30px;
 }
 
 .btn-primary {
@@ -87,4 +99,18 @@ header {
 
 .alert-danger {
 	color: #ff0018;
+}
+
+.table-dark {
+	background-color: rgba(0,0,0,.1);
+}
+
+.table-dark td, .table-dark th, .table-dark thead th {
+	border-color: rgba(255,255,255,.1);
+}
+
+.logged-in-form {
+	position: relative;
+	width: 60%;
+	margin: auto;
 }
