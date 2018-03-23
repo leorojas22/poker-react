@@ -43,7 +43,7 @@ class LoginPage extends React.Component {
 					<input type="password" className="form-control" name="password" placeholder="Password" value={this.props.password} onChange={this.props.handleInput} />
 				</FormGroup>
 				<FormGroup>
-					<button className="btn btn-primary btn-block" type="submit">Log In</button>
+					<button className="btn btn-success btn-block btn-lg" type="submit">Log In</button>
 				</FormGroup>
 				<FormGroup className="text-center">
 					Don't have an account? <Link to="/signup">Sign Up!</Link>

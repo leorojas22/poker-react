@@ -12,10 +12,22 @@ import { handleFormInputReducer } from './forminput';
 
 import {
 	tournamentListLoading,
-	tournamentList
+	tournamentList,
+	tournamentIsSaving,
+	tournamentSelected,
+	tournamentErrors,
 } from './tournament';
 
-var signUpPageState = combineReducers({
+import {
+	playerErrors,
+	playerSaving,
+	playerListLoading,
+	playerList,
+	playerSelected,
+	playerModalOpen
+} from './tournamentPlayer';
+
+const signUpPageState = combineReducers({
 	email			: handleFormInputReducer("email"),
 	password		: handleFormInputReducer("password"),
 	confirmPassword	: handleFormInputReducer("confirmPassword"),
@@ -23,28 +35,45 @@ var signUpPageState = combineReducers({
 	processing		: userSignUpIsProcessing
 });
 
-var loginPageState = combineReducers({
+const loginPageState = combineReducers({
 	email		: handleFormInputReducer("email"),
 	password	: handleFormInputReducer("password"),
 	errors		: userLoginHasErrors
 });
 
-var tournamentsState = combineReducers({
-	listLoading	: tournamentListLoading,
-	list		: tournamentList
+const tournamentsState = combineReducers({
+	listLoading			: tournamentListLoading,
+	list				: tournamentList,
+	selectedTournament	: tournamentSelected,
+	playerModalOpen		: playerModalOpen,
+	playerName			: handleFormInputReducer("player_name")
+});
+
+const tournamentFormState = combineReducers({
+	errors			: tournamentErrors,
+	isSaving		: tournamentIsSaving,
+	name			: handleFormInputReducer("tournament_name"),
+	startingChips	: handleFormInputReducer("starting_chips"),
+	buyIn			: handleFormInputReducer("buy_in"),
+	blindLevelTime	: handleFormInputReducer("blind_level_time"),
+	payoutType		: handleFormInputReducer("payout_type", 1),
+	payoutAmount	: handleFormInputReducer("payout_amount")
+});
+
+const tournamentPlayerState = combineReducers({
+	isSaving			: playerSaving,
+	errors				: playerErrors,
+	isLoading			: playerListLoading,
+	players				: playerList,
+	selectedPlayer		: playerSelected
 });
 
 export default combineReducers({
 	user,
-	loginChecked: userLoggedInChecked,
-	signUpPage: signUpPageState,
-	loginPage: loginPageState,
-	tournaments: tournamentsState
-	/*
-	userSignUpHasErrors,
-	userSignUpIsProcessing,
-	userSignUpEmail				: handleFormInputReducer("email"),
-	userSignUpPassword			: handleFormInputReducer("password"),
-	userSignUpConfirmPassword	: handleFormInputReducer("confirmPassword")
-	*/
+	loginChecked		: userLoggedInChecked,
+	signUpPage			: signUpPageState,
+	loginPage			: loginPageState,
+	tournaments			: tournamentsState,
+	tournamentForm		: tournamentFormState,
+	tournamentPlayers	: tournamentPlayerState
 });

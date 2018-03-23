@@ -2,8 +2,9 @@ const BaseController = require(process.cwd() + "/controllers/BaseController.js")
 
 
 const modelList = {
-	user: require(process.cwd() + "/models/User.js"),
-	tournament: require(process.cwd() + "/models/Tournament.js")
+	user				: require(process.cwd() + "/models/User.js"),
+	tournament			: require(process.cwd() + "/models/Tournament.js"),
+	tournamentPlayer	: require(process.cwd() + "/models/TournamentPlayer.js")
 };
 
 class CrudController extends BaseController {
@@ -43,6 +44,7 @@ class CrudController extends BaseController {
 			return this.respond(true, model.toJson());
 		})
 		.catch((err) => {
+			console.log(err);
 			return this.respond(false, err);
 		})
 

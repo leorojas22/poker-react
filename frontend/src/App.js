@@ -11,6 +11,7 @@ import LoginPage from './containers/LoginPage'
 
 import TournamentListPage from './containers/tournaments/TournamentListPage'
 import CreateTournamentPage from './containers/tournaments/CreateTournamentPage'
+import ViewTournamentPage from './containers/tournaments/ViewTournamentPage'
 
 import Header from './components/Header';
 import MainContainer from './components/MainContainer';
@@ -31,26 +32,32 @@ class App extends Component {
 				<MainContainer>
 					{
 						this.props.loginChecked ? (
-							<Fragment>
+							<Switch>
 								<LoggedOutRoute path="/signup" loginChecked={this.props.loginChecked} isLoggedIn={this.props.user} exact component={SignUpPage} />
 								<LoggedOutRoute path="/login" loginChecked={this.props.loginChecked} isLoggedIn={this.props.user} exact component={LoginPage} />
 								<PrivateRoute 
-									path="/tournaments" 
+									path="/" 
 									loginChecked={this.props.loginChecked} 
 									isLoggedIn={this.props.user} 
 									exact={true} 
 									component={TournamentListPage} 
 								/>
 								<PrivateRoute 
-									path="/tournaments/create" 
+									path="/tournament/create" 
 									loginChecked={this.props.loginChecked} 
 									isLoggedIn={this.props.user} 
 									exact={true} 
 									component={CreateTournamentPage} 
 								/>
-
+								<PrivateRoute 
+									path="/tournament/:tournamentID" 
+									loginChecked={this.props.loginChecked} 
+									isLoggedIn={this.props.user} 
+									exact={true} 
+									component={ViewTournamentPage} 
+								/>
 								
-							</Fragment>
+							</Switch>
 						)
 						:
 						(
@@ -64,7 +71,7 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => {
-	console.log(state);
+	
 	return {
 		user: state.user,
 		loginChecked: state.loginChecked

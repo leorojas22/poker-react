@@ -17,7 +17,7 @@ const LoggedOutRoute = ({ component: Component, loginChecked: loginChecked, isLo
 					
 					<Redirect
 						to={{
-							pathname: "/tournaments"
+							pathname: "/"
 						}}
 					/>
 				)

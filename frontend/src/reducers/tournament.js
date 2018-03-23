@@ -15,3 +15,39 @@ export function tournamentList(state = [], action) {
 			return state;
 	}
 }
+
+export function tournamentIsSaving(state = false, action) {
+	switch(action.type) {
+		case 'TOURNAMENT_IS_SAVING':
+			return action.status;
+		default:
+			return state;
+	}
+}
+
+export function tournamentSelected(state = false, action) {
+	switch(action.type) {
+		case 'TOURNAMENT_SELECTED':
+			return action.tournament;
+		default:
+			return state;
+	}
+}
+
+export function tournamentErrors(state = [], action) {
+	switch(action.type) {
+		case 'TOURNAMENT_ERRORS':
+			return action.errors;
+		default:
+			return state;
+	}
+}
+
+export function tournamentSelectedError(state = false, action) {
+	switch(action.type) {
+		case 'TOURNAMENT_SELECTED_ERRORS':
+			return action.errors;
+		default:
+			return state;
+	}
+}

@@ -51,7 +51,7 @@ class SignUpPage extends React.Component {
 						<input type="password" className="form-control" name="confirmPassword" placeholder="Confirm Password" value={this.props.confirmPassword} onChange={this.props.userEnterConfirmPassword} />
 					</FormGroup>
 					<FormGroup>
-						<button className="btn btn-primary btn-block" type="submit">Sign Up</button>
+						<button className="btn btn-success btn-block btn-lg" type="submit">Sign Up</button>
 					</FormGroup>
 					<FormGroup className="text-center">
 						Already have an account? <Link to="/login">Log In!</Link>

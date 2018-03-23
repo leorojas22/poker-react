@@ -40,6 +40,14 @@ header {
 	z-index: 20;
 }
 
+.mb-lg {
+	margin-bottom: 25px;
+}
+
+.mr-md {
+	margin-right: 10px;
+}
+
 
 .main-container {
 	background-color: #212121;
@@ -75,22 +83,36 @@ header {
 
 .btn {
 	border-radius: 0px;
-	font-size: 24px;
 	font-weight: bold;
 	text-transform: uppercase;
 	padding-left: 30px;
 	padding-right: 30px;
 }
 
-.btn-primary {
+.btn-lg {
+	font-size: 24px;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.btn-sm {
+	font-size: .875rem;
+}
+
+.btn-success.disabled, .btn-success:disabled,
+.btn-success {
 	background-color: #006c03;
 	border: solid #004c02 1px;
 }
 
-.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle,
-.btn-primary:hover {
+.btn-success:not(:disabled):not(.disabled).active, .btn-success:not(:disabled):not(.disabled):active, .show>.btn-success.dropdown-toggle,
+.btn-success:not(:disabled):not(.disabled):hover {
 	background-color: #015a03;
 	border: solid #004202 1px;
+}
+
+.btn.disabled, .btn:disabled {
+	cursor: not-allowed;
 }
 
 .alert p {
@@ -113,4 +135,63 @@ header {
 	position: relative;
 	width: 60%;
 	margin: auto;
+}
+
+.input-group-append {
+	box-shadow: 3px 0px 15px 3px rgba(255,255,255,.2);
+}
+
+.manage-tournament h3 {
+	font-size: 18px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.manage-tournament .tournament-info {
+	border-bottom: dotted #6f6f6f 1px;
+	padding: 8px 3px;
+}
+
+.manage-tournament .tournament-info label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 0px;
+}
+
+a {
+	cursor: pointer;
+}
+
+.modal-content {
+	background-color: #2f2f2f;
+	box-shadow: 0px 14px 36px 15px rgba(0,0,0,.35);
+}
+
+.modal-header {
+	border-bottom-color: #545454;
+}
+
+.modal-footer {
+	border-top-color: #545454;
+}
+
+
+.modal-title {
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.close {
+	opacity: .75;
+	color: white;
+	text-shadow: none;
+}
+
+.close:focus, .close:hover {
+	color: white;
+	opacity: 1;
+}
+
+.dimmed {
+	opacity: .5;
 }

@@ -23,6 +23,24 @@ export const ajaxHelper = (url, options) => {
 			options.body = JSON.stringify(options.body);
 		}
 	}
+	else if (typeof options.method !== 'undefined' && options.method == 'GET' && typeof options.params !== 'undefined') {
+		let params = options.params;
+		delete options.params;
+
+		if(Object.keys(params).length > 0) {
+			// Append the params to url as a query string
+			let queryStringArray = [];
+			for(let property in params) {
+				let value = params[property];
+				queryStringArray.push(encodeURIComponent(property)+"="+encodeURIComponent(value));
+			}
+
+			let queryString = queryStringArray.join("&");
+
+			url += "?"+queryString;
+
+		}
+	}
 
 	return fetch(API_URL+url, options)
 	.then((data) => {

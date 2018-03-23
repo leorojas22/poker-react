@@ -2,18 +2,33 @@ const moment = require("moment");
 const mongoose = require(process.cwd() + "/db.js");
 class BaseModel {
 
+
+	static validate(data) {
+		return [];
+	}
+
 	static create(data) {
 		var writeData = {};
-		var searchableProperties = this.settableProperties();
-		for(var property in searchableProperties) {
+		var settableProperties = this.settableProperties();
+
+		for(let x in settableProperties) {
+			let property = settableProperties[x];
 			if(typeof data[property] !== 'undefined') {
 				writeData[property] = data[property];
 			}
 		}
 
+		var errors = this.validate(writeData);
+		console.log(errors);
+		if(errors.length == 0) {
 
-		var model = new this(writeData);
-		return model.save();
+			console.log(writeData);
+			var model = new this(writeData);
+			return model.save();
+		}
+		else {
+			return Promise.reject(errors);
+		}
 	}
 
 	static searchableProperties() {
@@ -78,7 +93,7 @@ class BaseModel {
 			}
 		}
 
-		console.log(where);
+		where.deleted = undefined;
 		var returnVal = this.find(where);
 		if(orderBy) {
 			returnVal.sort(orderBy);

@@ -1,5 +1,5 @@
-export const handleFormInputReducer = (fieldName) => {
-	return (state = "", action) => {
+export const handleFormInputReducer = (fieldName, defaultValue = "") => {
+	return (state = defaultValue, action) => {
 		switch(action.type) {
 			case 'FORM_INPUT':
 				if(action.name == fieldName) {
