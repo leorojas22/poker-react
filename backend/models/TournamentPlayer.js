@@ -46,7 +46,7 @@ class TournamentPlayer extends BaseModel {
 			'name',
 			'chip_count',
 			'finished',
-			
+			'deleted'
 		];
 	}
 
@@ -72,6 +72,28 @@ class TournamentPlayer extends BaseModel {
 		}
 	}
 
+	setPropertyValues(values) {
+
+		if(typeof values.finished !== 'undefined' && !this.finished && values.finished === true) {
+			// Player has not yet been marked as finished
+			values.finished = new Date();
+			values.chip_count = 0;
+		}
+		else if(typeof values.finished !== 'undefined' && values.finished === false) {
+			values.finished = null;
+		}
+		else if(this.finished) {
+			// Make sure chip count remains 0 if the player is finished
+			values.finished = this.finished;
+			values.chip_count = 0;
+		}
+		
+
+
+		console.log(values);
+		return super.setPropertyValues(values);
+	}
+
 	toJson() {
 		return {
 			id			: this._id,
@@ -89,12 +111,16 @@ class TournamentPlayer extends BaseModel {
 		if(typeof searchValues.orderBy === 'undefined') {
 			searchValues.orderBy = {
 				chip_count: 'desc',
-				name: 'asc',
-				finished: 'desc'
+				finished: 'desc',
+				name: 'asc'
 			}
 		}
 
 		return super.search(searchValues);
+	}
+
+	static displayName() {
+		return "Tournament Player";
 	}
 
 }

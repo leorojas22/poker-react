@@ -6,7 +6,7 @@ export const ajaxHelper = (url, options) => {
 		options.credentials = 'include';
 	}
 
-	if(typeof options.method !== 'undefined' && (options.method == 'POST' || options.method == 'PUT')) {
+	if(typeof options.method !== 'undefined' && (options.method == 'POST' || options.method == 'PATCH')) {
 		if(typeof options.headers !== 'undefined' && typeof options.headers['Content-Type'] === 'undefined') {
 			// Content-Type header not set, but headers are set
 			options.headers['Content-Type'] = 'application/json';

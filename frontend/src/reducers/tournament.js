@@ -51,3 +51,12 @@ export function tournamentSelectedError(state = false, action) {
 			return state;
 	}
 }
+
+export function tournamentCreated(state = false, action) {
+	switch(action.type) {
+		case 'TOURNAMENT_CREATED':
+			return action.created;
+		default:
+			return state;
+	}
+}

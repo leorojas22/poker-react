@@ -32,6 +32,15 @@ export function openPlayerModal(status) {
 	}
 }
 
+export function setPlayerModalType(modalType) {
+
+	console.log(modalType);
+	return {
+		type: 'PLAYER_MODAL_TYPE',
+		modalType
+	}
+}
+
 export const togglePlayerModal = (status) => {
 	return (dispatch) => {
 		dispatch(openPlayerModal(1));
@@ -55,7 +64,7 @@ export const savePlayer = (player) => {
 			return dispatch(playerErrors(errors));
 		}
 		
-		let funcName = typeof player.id === 'undefined' ? "create" : "update";
+		let funcName = typeof player.id === 'undefined' ? "create" : (typeof player.delete === 'undefined' ? "update" : "delete");
 
 		dispatch(playerErrors([]));
 		dispatch(savingPlayer(true));
@@ -68,7 +77,7 @@ export const savePlayer = (player) => {
 			console.log(err);
 			dispatch(savingPlayer(false));
 			dispatch(playerErrors(err));
-			return dispatch(selectPlayer(null));
+			return Promise.reject(err);
 		});
 	}
 }
@@ -77,7 +86,7 @@ export const loadPlayers = (tournamentID) => {
 	return (dispatch) => {
 		
 		dispatch(loadingPlayerList(true));
-		TournamentPlayer.find({ tournament_id: tournamentID }).then(players => {
+		TournamentPlayer.find({ tournament: tournamentID }).then(players => {
 			dispatch(loadingPlayerList(false));
 			return dispatch(playerList(players));
 		})

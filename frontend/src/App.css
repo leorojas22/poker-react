@@ -195,3 +195,7 @@ a {
 .dimmed {
 	opacity: .5;
 }
+
+.text-linethrough {
+	text-decoration: line-through;
+}

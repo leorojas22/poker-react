@@ -42,6 +42,46 @@ class BaseModel {
 		})
 	}
 
+	static update(props = {}) {
+
+		if(typeof props.id === 'undefined') {
+			return Promise.reject("ID is required.");
+		}
+
+		return ajaxHelper("/model/"+this.modelName+"/"+props.id, {
+			method: 'PATCH',
+			body: props
+		})
+		.then(result => {
+			return result.body;
+		})
+		.catch(err => {
+			console.log(err);
+			let errors = parseError(err, "Error creating "+this.displayName+".'");
+			return Promise.reject(errors);
+		})
+	}
+
+	static delete(props = {}) {
+
+		if(typeof props.id === 'undefined') {
+			return Promise.reject("ID is required.");
+		}
+
+		return ajaxHelper("/model/"+this.modelName+"/"+props.id, {
+			method: 'DELETE',
+			body: props
+		})
+		.then(result => {
+			return result.body;
+		})
+		.catch(err => {
+			console.log(err);
+			let errors = parseError(err, "Error creating "+this.displayName+".'");
+			return Promise.reject(errors);
+		})
+	}
+
 	static validate(data = {}) {
 		return [];
 	}

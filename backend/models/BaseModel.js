@@ -7,7 +7,7 @@ class BaseModel {
 		return [];
 	}
 
-	static create(data) {
+	static filterWriteData(data) {
 		var writeData = {};
 		var settableProperties = this.settableProperties();
 
@@ -18,7 +18,13 @@ class BaseModel {
 			}
 		}
 
-		var errors = this.validate(writeData);
+		return writeData;
+	}
+
+	static create(data) {
+		let writeData = this.filterWriteData(data);
+
+		let errors = this.validate(writeData);
 		console.log(errors);
 		if(errors.length == 0) {
 
@@ -105,12 +111,12 @@ class BaseModel {
 		return returnVal;
 	}
 
-	setPropertyValues(propertValues) {
+	setPropertyValues(propertyValues) {
 		var settableProperties = this.constructor.settableProperties();
 		for(var x in settableProperties) {
 			var property = settableProperties[x];
-			if(typeof propertValues[property] !== 'undefined') {
-				this[property] = propertValues[property];
+			if(typeof propertyValues[property] !== 'undefined') {
+				this[property] = propertyValues[property];
 			}
 		}
 

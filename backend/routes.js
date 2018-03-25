@@ -1,12 +1,26 @@
+const BaseController = require(process.cwd() + "/controllers/BaseController.js");
 const CrudController = require(process.cwd() + "/controllers/CrudController.js");
 const UserController = require(process.cwd() + "/controllers/UserController.js");
 const verifyJWTMiddleware = require(process.cwd() + "/middleware/verifyJWT.js");
 
 
+const crudRoute = (req, res, cb) => {
+	try {
+		let crudController = new CrudController(req, res);
+		return cb(crudController);
+	}
+	catch(e) {
+		console.log(e);
+		res.status(400);
+		let controller = new BaseController(req, res);
+		return controller.respond(false, e);
+	}
+}
+
 module.exports = (app) => {
 
 	app.post("/model/user/login", (req, res) => {
-		var userController = new UserController(req, res);
+		let userController = new UserController(req, res);
 		return userController.login();
 	});
 
@@ -17,35 +31,19 @@ module.exports = (app) => {
 	});
 
 	app.use("/model/:modelName", verifyJWTMiddleware);
-	app.get("/model/:modelName", (req, res) => {		
+	app.get("/model/:modelName", (req, res) => crudRoute(req, res, (controller) => {
+		return controller.read();
+	}));
 
-		var modelName = req.params.modelName;
-		try {
-			var crudController = new CrudController(req, res, {
-				model: modelName
-			});
-			return crudController.read();
-		}
-		catch(e) {
-			console.log(e);
-			res.status(400);
-			return res.json({ result: false, message: "Error" });
-		}
+	app.post("/model/:modelName", (req, res) => crudRoute(req, res, (controller) => {
+		return controller.create();
+	}));
 
-	});
+	app.patch("/model/:modelName/:modelID", (req, res) => crudRoute(req, res, (controller) => {
+		return controller.update();
+	}));
 
-	app.post("/model/:modelName", (req, res) => {
-		var modelName = req.params.modelName;
-		try {
-			var crudController = new CrudController(req, res, {
-				model: modelName
-			});
-			return crudController.create();
-		}
-		catch(e) {
-			console.log(e);
-			res.status(400);
-			return res.json({ result: false, message: "Error" });
-		}
-	});
+	app.delete("/model/:modelName/:modelID", (req, res) => crudRoute(req, res, (controller) => {
+		return controller.delete();
+	}));
 }

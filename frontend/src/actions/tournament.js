@@ -42,6 +42,13 @@ export function selectTournamentErrors(errors) {
 	}
 }
 
+export function tournamentCreated(created) {
+	return {
+		type: 'TOURNAMENT_CREATED',
+		created
+	}
+}
+
 export function loadFullTournament(tournamentID) {
 	return (dispatch) => {
 
@@ -66,17 +73,18 @@ export function createTournament(tournamentObj) {
 		// Tournament is currently saving...
 		dispatch(savingTournament(true));
 
-		console.log("TEST");
 		// Clear tournament errors
 		dispatch(tournamentErrors([]));
 		
-		Tournament.create(tournamentObj).then(tournament => {
+		return Tournament.create(tournamentObj).then(tournament => {
 
 			// Tournament finished saving
 			dispatch(savingTournament(false));
 
 			// Select the tournament
-			return dispatch(selectedTournament(tournament));
+			dispatch(selectedTournament(tournament));
+
+			return Promise.resolve(tournament);
 		})
 		.catch(err => {
 			console.log("ERRORS");
@@ -85,7 +93,9 @@ export function createTournament(tournamentObj) {
 			dispatch(savingTournament(false));
 
 			// Set errors
-			return dispatch(tournamentErrors(err));
+			dispatch(tournamentErrors(err));
+
+			return Promise.reject(err);
 		})
 	}
 }

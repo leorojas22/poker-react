@@ -6,6 +6,7 @@ class BaseController {
 	}
 
 	parseError(err) {
+
 		var errors = [];
 		if(typeof err.errors !== 'undefined') {
 			for(var key in err.errors) {
@@ -17,6 +18,9 @@ class BaseController {
 		else if(typeof err.message !== 'undefined') {
 			errors.push(err.message);
 		}
+		else if(!Array.isArray(err)) {
+			errors = [err];
+		}
 		else {
 			errors = err;
 		}
@@ -25,7 +29,6 @@ class BaseController {
 	}
 
 	respond(result, body) {
-
 		if(result) {
 			return this.res.json({ result, body });
 		}

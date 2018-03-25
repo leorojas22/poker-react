@@ -93,7 +93,8 @@ class Tournament extends BaseModel {
 			'blind_level_time',
 			'time_elapsed',
 			'payout_type',
-			'payout_type_amount'
+			'payout_type_amount',
+			'deleted'
 		];
 	}
 
@@ -118,30 +119,9 @@ class Tournament extends BaseModel {
 		}
 	}
 
-	/*
-	async getPlayers(json = false) {
-		return await TournamentPlayer.find({
-			deleted: null,
-			tournament: this._id
-		}).then(players => {
-			console.log("TEST");
-			console.log(players);
-			if(players.length > 0) {
-				if(json) {
-					return players.map((player, index) => {
-						return player.toJson();
-					});
-				}
-				else {
-					return players;
-				}
-			}
-
-			return [];
-		});
-	
+	static displayName() {
+		return "Tournament";
 	}
-	*/
 }
 
 // Class constants

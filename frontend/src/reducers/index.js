@@ -16,6 +16,7 @@ import {
 	tournamentIsSaving,
 	tournamentSelected,
 	tournamentErrors,
+	tournamentCreated
 } from './tournament';
 
 import {
@@ -24,7 +25,8 @@ import {
 	playerListLoading,
 	playerList,
 	playerSelected,
-	playerModalOpen
+	playerModalOpen,
+	playerModalType
 } from './tournamentPlayer';
 
 const signUpPageState = combineReducers({
@@ -45,8 +47,7 @@ const tournamentsState = combineReducers({
 	listLoading			: tournamentListLoading,
 	list				: tournamentList,
 	selectedTournament	: tournamentSelected,
-	playerModalOpen		: playerModalOpen,
-	playerName			: handleFormInputReducer("player_name")
+	playerModalOpen		: playerModalOpen
 });
 
 const tournamentFormState = combineReducers({
@@ -57,7 +58,8 @@ const tournamentFormState = combineReducers({
 	buyIn			: handleFormInputReducer("buy_in"),
 	blindLevelTime	: handleFormInputReducer("blind_level_time"),
 	payoutType		: handleFormInputReducer("payout_type", 1),
-	payoutAmount	: handleFormInputReducer("payout_amount")
+	payoutAmount	: handleFormInputReducer("payout_amount"),
+	tournamentCreated: tournamentCreated
 });
 
 const tournamentPlayerState = combineReducers({
@@ -65,7 +67,11 @@ const tournamentPlayerState = combineReducers({
 	errors				: playerErrors,
 	isLoading			: playerListLoading,
 	players				: playerList,
-	selectedPlayer		: playerSelected
+	selectedPlayer		: playerSelected,
+	playerModalType		: playerModalType,
+	playerName			: handleFormInputReducer("player_name"),
+	chipCount			: handleFormInputReducer("chip_count"),
+	playerFinished		: handleFormInputReducer("player_finished")
 });
 
 export default combineReducers({

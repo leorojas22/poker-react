@@ -52,3 +52,11 @@ export function playerModalOpen(state = false, action) {
 	}
 }
 
+export function playerModalType(state = "Add", action) {
+	switch(action.type) {
+		case 'PLAYER_MODAL_TYPE':
+			return action.modalType;
+		default:
+			return state;
+	}
+}
