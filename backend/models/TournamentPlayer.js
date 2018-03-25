@@ -97,13 +97,13 @@ class TournamentPlayer extends BaseModel {
 	toJson() {
 		return {
 			id			: this._id,
-			user		: (this.user instanceof User) 		? this.user.toJson() 		: this.user,
-			tournament	: (this.tournament instanceof User) ? this.user.toJson() 		: this.user,
-			name		: typeof this.name !== 'undefined' 			? this.name 		: "",
-			chip_count	: typeof this.chip_count !== 'undefined' 	? this.chip_count 	: 0,
-			finished	: typeof this.finished !== 'undefined' 		? this.finished 	: null,
-			created		: typeof this.created !== 'undefined' 		? this.created 		: null,
-			updated		: typeof this.updated !== 'undefined' 		? this.updated 		: null,
+			user		: (this.user instanceof User) 				? this.user.toJson() 		: this.user,
+			tournament	: (this.tournament instanceof Tournament) 	? this.tournament.toJson() 	: this.tournament,
+			name		: typeof this.name !== 'undefined' 			? this.name 				: "",
+			chip_count	: typeof this.chip_count !== 'undefined' 	? this.chip_count 			: 0,
+			finished	: typeof this.finished !== 'undefined' 		? this.finished 			: null,
+			created		: typeof this.created !== 'undefined' 		? this.created 				: null,
+			updated		: typeof this.updated !== 'undefined' 		? this.updated 				: null,
 		}
 	}
 

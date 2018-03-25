@@ -165,6 +165,7 @@ a {
 .modal-content {
 	background-color: #2f2f2f;
 	box-shadow: 0px 14px 36px 15px rgba(0,0,0,.35);
+	border-radius: 0px;
 }
 
 .modal-header {

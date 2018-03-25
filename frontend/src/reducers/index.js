@@ -29,6 +29,8 @@ import {
 	playerModalType
 } from './tournamentPlayer';
 
+import { toggleModal } from './modal';
+
 const signUpPageState = combineReducers({
 	email			: handleFormInputReducer("email"),
 	password		: handleFormInputReducer("password"),
@@ -47,7 +49,7 @@ const tournamentsState = combineReducers({
 	listLoading			: tournamentListLoading,
 	list				: tournamentList,
 	selectedTournament	: tournamentSelected,
-	playerModalOpen		: playerModalOpen
+	playerModalOpen		: toggleModal("playerModal")
 });
 
 const tournamentFormState = combineReducers({
@@ -71,7 +73,8 @@ const tournamentPlayerState = combineReducers({
 	playerModalType		: playerModalType,
 	playerName			: handleFormInputReducer("player_name"),
 	chipCount			: handleFormInputReducer("chip_count"),
-	playerFinished		: handleFormInputReducer("player_finished")
+	playerFinished		: handleFormInputReducer("player_finished"),
+	confirmDeleteModal 	: toggleModal("confirmDeletePlayerModal")
 });
 
 export default combineReducers({

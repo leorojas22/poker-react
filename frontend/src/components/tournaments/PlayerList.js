@@ -3,15 +3,20 @@ import React, { Fragment, Component } from 'react';
 import numeral from 'numeral';
 
 import { connect } from 'react-redux';
-import { handleFormInput } from '../actions/forminput';
-import { togglePlayerModal, setPlayerModalType, selectPlayer } from '../actions/tournamentPlayer';
+import { handleFormInput } from '../../actions/forminput';
+import { setPlayerModalType, selectPlayer } from '../../actions/tournamentPlayer';
+import { toggleModal } from '../../actions/modal';
+
+import ConfirmDeletePlayerModal from './ConfirmDeletePlayerModal';
+
 
 class PlayerList extends Component {
 
 	constructor(props) {
 		super(props);
 
-		this.openEditPlayerModal = this.openEditPlayerModal.bind(this);
+		this.openEditPlayerModal 		= this.openEditPlayerModal.bind(this);
+		this.openConfirmDeleteModal 	= this.openConfirmDeleteModal.bind(this);
 	}
 
 	openEditPlayerModal(playerIndex) {
@@ -43,6 +48,15 @@ class PlayerList extends Component {
 		this.props.setPlayerModalType("Edit");
 		this.props.togglePlayerModal(true);
 	}
+
+	openConfirmDeleteModal(playerIndex) {
+		let player = this.props.players[playerIndex];
+
+		this.props.selectPlayer(player);
+		this.props.toggleConfirmDeletePlayerModal(true);
+	}
+
+	
 
 	render() {
 		let props = this.props;
@@ -83,7 +97,7 @@ class PlayerList extends Component {
 										<td>{numeral(player.chip_count).format("0,0")}</td>
 										<td className="text-right">
 											<button className="btn btn-sm btn-primary mr-md" type="button" onClick={this.openEditPlayerModal.bind(this, index)}><i className="fa fa-edit" /></button>
-											<button className="btn btn-sm btn-danger" type="button"><i className="fa fa-times" /></button>
+											<button className="btn btn-sm btn-danger" type="button" onClick={this.openConfirmDeleteModal.bind(this, index)}><i className="fa fa-times" /></button>
 										</td>
 									</tr>
 								)
@@ -92,16 +106,23 @@ class PlayerList extends Component {
 							(<tr><td colSpan="4" className="text-center">No players yet! <a tabIndex="1" onClick={props.openAddPlayerModal}>Add a Player</a></td></tr>)}
 					</tbody>
 				</table>
+				<ConfirmDeletePlayerModal />
 			</Fragment>
 		);
 	}
 }
 
+const mapStateToProps = (state) => ({
+	confirmDeleteModalOpen	: state.tournamentPlayers.confirmDeleteModal,
+	selectedPlayer			: state.tournamentPlayers.selectedPlayer
+});
+
 const matchDispatchToProps = (dispatch) => ({
-	handleFormInput		: (field) => dispatch(handleFormInput(field)),
-	togglePlayerModal	: (status) => dispatch(togglePlayerModal(status)),
-	setPlayerModalType	: (type) => dispatch(setPlayerModalType(type)),
-	selectPlayer		: (player) => dispatch(selectPlayer(player))
+	handleFormInput					: (field) => dispatch(handleFormInput(field)),
+	togglePlayerModal				: (status) => dispatch(toggleModal(status, "playerModal")),
+	setPlayerModalType				: (type) => dispatch(setPlayerModalType(type)),
+	selectPlayer					: (player) => dispatch(selectPlayer(player)),
+	toggleConfirmDeletePlayerModal 	: (status) => dispatch(toggleModal(status, "confirmDeletePlayerModal"))
 })
 
-export default connect(null, matchDispatchToProps)(PlayerList);
+export default connect(mapStateToProps, matchDispatchToProps)(PlayerList);

@@ -7,17 +7,17 @@ import numeral from 'numeral';
 import Tournament from '../../models/Tournament'
 
 // Components
-import TournamentInfo from '../../components/TournamentInfo';
-import PlayerList from '../../components/PlayerList';
-
-import PlayerModal from './PlayerModal';
+import TournamentInfo from '../../components/tournaments/TournamentInfo';
+import PlayerList from '../../components/tournaments/PlayerList';
+import PlayerModal from '../../components/tournaments/PlayerModal';
 
 
 // Actions
-import { loadFullTournament } from '../../actions/tournament';
+import { loadFullTournament, selectedTournament } from '../../actions/tournament';
 import { handleFormInput } from '../../actions/forminput';
 import { setPlayerModalType, loadPlayers, togglePlayerModal } from '../../actions/tournamentPlayer';
 
+import { toggleModal } from '../../actions/modal';
 
 class ViewTournamentPage extends React.Component {
 	constructor(props) {
@@ -28,6 +28,10 @@ class ViewTournamentPage extends React.Component {
 		this.tournamentID = this.props.match.params.tournamentID;
 	}
 
+	componentWillMount() {
+		this.props.selectedTournament(false);
+	}
+
 	componentDidMount() {
 		let tournamentID = this.tournamentID;
 		console.log(this.tournamentID);
@@ -36,7 +40,6 @@ class ViewTournamentPage extends React.Component {
 	}
 
 	openAddPlayerModal() {
-		document.body.classList.add("modal-open");
 		var props = this.props;
 		
 		this.props.handleFormInput({
@@ -47,7 +50,7 @@ class ViewTournamentPage extends React.Component {
 		});
 		
 		this.props.setPlayerModalType("Add");
-		props.togglePlayerModal(true);
+		props.togglePlayerModal(true, "playerModal");
 	}
 
 	render() {
@@ -103,10 +106,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		loadFullTournament		: (tournamentID) => dispatch(loadFullTournament(tournamentID)),
-		togglePlayerModal		: (status) => dispatch(togglePlayerModal(status)),
-		handleFormInput	: (field) => dispatch(handleFormInput(field)),
+		togglePlayerModal		: (status, modalName) => dispatch(toggleModal(status, modalName)),
+		handleFormInput			: (field) => dispatch(handleFormInput(field)),
 		loadPlayers				: (tournamentID) => dispatch(loadPlayers(tournamentID)),
-		setPlayerModalType		: (type) => dispatch(setPlayerModalType(type))
+		setPlayerModalType		: (type) => dispatch(setPlayerModalType(type)),
+		selectedTournament		: (tournament) => dispatch(selectedTournament(tournament))
 	}
 }
 

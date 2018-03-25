@@ -43,15 +43,6 @@ export const playerSelected = (state = [], action) => {
 	}
 }
 
-export function playerModalOpen(state = false, action) {
-	switch(action.type) {
-		case 'PLAYER_MODAL_OPEN':
-			return action.status;
-		default:
-			return state;
-	}
-}
-
 export function playerModalType(state = "Add", action) {
 	switch(action.type) {
 		case 'PLAYER_MODAL_TYPE':

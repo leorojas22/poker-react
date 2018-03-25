@@ -1,5 +1,7 @@
 import TournamentPlayer from '../models/TournamentPlayer';
 
+import { toggleModal } from './modal';
+
 export const playerErrors = (errors) => ({
 	type: 'PLAYER_ERRORS',
 	errors
@@ -41,21 +43,6 @@ export function setPlayerModalType(modalType) {
 	}
 }
 
-export const togglePlayerModal = (status) => {
-	return (dispatch) => {
-		dispatch(openPlayerModal(1));
-
-		// Opening modal: 2
-		// Closing modal: 0
-		let nextStatus = (status) ? 2 : 0;
-
-		window.setTimeout(() => {
-			dispatch(openPlayerModal(nextStatus));
-		}, 100);
-
-	}
-}
-
 export const savePlayer = (player) => {
 	return (dispatch) => {
 		let errors = TournamentPlayer.validate(player);
@@ -64,13 +51,14 @@ export const savePlayer = (player) => {
 			return dispatch(playerErrors(errors));
 		}
 		
-		let funcName = typeof player.id === 'undefined' ? "create" : (typeof player.delete === 'undefined' ? "update" : "delete");
+		let funcName = typeof player.id === 'undefined' ? "create" : (typeof player.deleted === 'undefined' ? "update" : "delete");
 
 		dispatch(playerErrors([]));
 		dispatch(savingPlayer(true));
 		TournamentPlayer[funcName](player).then(result => {
 			dispatch(savingPlayer(false));
-			dispatch(togglePlayerModal(false));
+			dispatch(toggleModal(false, "playerModal"));
+			dispatch(toggleModal(false, "confirmDeletePlayerModal"));
 			return dispatch(loadPlayers(player.tournament));
 		})
 		.catch(err => {
