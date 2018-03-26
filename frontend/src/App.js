@@ -50,6 +50,13 @@ class App extends Component {
 									component={CreateTournamentPage} 
 								/>
 								<PrivateRoute 
+									path="/tournament/:tournamentID/edit" 
+									loginChecked={this.props.loginChecked} 
+									isLoggedIn={this.props.user} 
+									exact={true} 
+									component={CreateTournamentPage} 
+								/>
+								<PrivateRoute 
 									path="/tournament/:tournamentID" 
 									loginChecked={this.props.loginChecked} 
 									isLoggedIn={this.props.user} 

@@ -60,3 +60,13 @@ export function tournamentCreated(state = false, action) {
 			return state;
 	}
 }
+
+export function tournamentIsLoading(state = false, action) {
+	switch(action.type) {
+		case 'TOURNAMENT_LOADING':
+			return action.status;
+		default:
+			return state;
+	}
+}
+

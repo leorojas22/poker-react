@@ -7,6 +7,8 @@ import { handleFormInput } from '../../actions/forminput';
 import { setPlayerModalType, selectPlayer } from '../../actions/tournamentPlayer';
 import { toggleModal } from '../../actions/modal';
 
+import Tournament from '../../models/Tournament';
+
 import ConfirmDeletePlayerModal from './ConfirmDeletePlayerModal';
 
 
@@ -90,8 +92,11 @@ class PlayerList extends Component {
 							props.players.length > 0 
 							? 
 							props.players.map((player, index) => {
+
+								let payoutLine = index === (props.playersToPay-1) ? " payout-line" : "";
+
 								return (
-									<tr key={index} className={player.finished ? "text-muted font-italic text-linethrough" : ""}>
+									<tr key={index} className={(player.finished ? "text-muted font-italic text-linethrough" : "")+payoutLine}>
 										<td>{index+1}</td>
 										<td>{player.name}</td>
 										<td>{numeral(player.chip_count).format("0,0")}</td>

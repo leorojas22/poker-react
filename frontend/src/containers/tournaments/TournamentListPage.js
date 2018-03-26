@@ -14,9 +14,31 @@ class TournamentListPage extends React.Component {
 	}
 
 	render() {
+		console.log(this.props.tournamentSelectedError);
 		return (
 			<Fragment>
 				<h1 className="page-title">Your Tournaments</h1>
+				{
+					this.props.errors ? 
+					(
+						<div className="row mb-lg">
+							<div className="col-12">
+								<div className="alert alert-danger">
+									{
+										Array.isArray(this.props.errors) ?
+										this.props.errors.map((value, index) => (
+											<p key={index}>{value}</p>
+										))
+										:
+										this.props.errors
+									}
+								</div>
+							</div>
+						</div>
+					)
+					:
+					""
+				}
 				<div className="row mb-lg">
 					<div className="col-12 text-right">
 						<Link to="/tournament/create" className="btn btn-success">Create Tournament</Link>
@@ -48,7 +70,7 @@ class TournamentListPage extends React.Component {
 										
 
 										return (
-											<tr>
+											<tr key={index}>
 												<td>{tournament.name}</td>
 												<td>{numeral(tournament.starting_chips).format("0,0")}</td>
 												<td>{numeral(tournament.buyin).format("$0,0.00")}</td>
@@ -89,9 +111,11 @@ class TournamentListPage extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+	console.log(state);
 	return {
 		isLoading: state.tournaments.listLoading,
-		tournaments: state.tournaments.list
+		tournaments: state.tournaments.list,
+		errors: state.tournaments.tournamentSelectedError
 	}
 }
 

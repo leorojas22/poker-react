@@ -107,23 +107,23 @@ class CrudController extends BaseController {
 
 
 	read() {
-		var self = this;
-		var searchData = this.req.query;
+		let self = this;
+		let searchData = this.req.query;
 
 		if(this.filterByUser) {
 			searchData.user = this.req.user._id;
 		}
 
 		return this.Model.search(searchData).then((models) => {
-			var filteredModels = models.map((model, index) => {
+			let filteredModels = models.map((model, index) => {
 				return model.toJson();
 			});
 
-			if(typeof searchData.id !== 'undefined') {
+			if(typeof searchData.id !== 'undefined' && filteredModels.length > 0) {
 				// Return single object instead of array when searching by id
 				filteredModels = filteredModels.shift();
 			}
-
+		
 			return self.respond(true, filteredModels);
 		})
 		.catch(err => {

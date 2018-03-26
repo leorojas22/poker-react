@@ -16,7 +16,9 @@ import {
 	tournamentIsSaving,
 	tournamentSelected,
 	tournamentErrors,
-	tournamentCreated
+	tournamentCreated,
+	tournamentIsLoading,
+	tournamentSelectedError
 } from './tournament';
 
 import {
@@ -49,7 +51,9 @@ const tournamentsState = combineReducers({
 	listLoading			: tournamentListLoading,
 	list				: tournamentList,
 	selectedTournament	: tournamentSelected,
-	playerModalOpen		: toggleModal("playerModal")
+	playerModalOpen		: toggleModal("playerModal"),
+	tournamentIsLoading	: tournamentIsLoading,
+	tournamentSelectedError : tournamentSelectedError
 });
 
 const tournamentFormState = combineReducers({

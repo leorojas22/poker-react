@@ -11,6 +11,7 @@ class Tournament extends BaseModel {
 		return "tournament";
 	}
 
+
 	static validate(data = {}) {
 		var requiredProps = {
 			name: 'Tournament Name',
@@ -48,5 +49,17 @@ class Tournament extends BaseModel {
 
 	}
 }
+
+// Class constants
+Object.defineProperty(Tournament, 'PAYOUT_TYPE_PERCENTAGE', {
+	value: 1,
+	writable: false
+});
+
+Object.defineProperty(Tournament, 'PAYOUT_TYPE_FIXED', {
+	value: 2,
+	writable: false
+});
+
 
 export default Tournament;

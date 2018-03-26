@@ -48,6 +48,14 @@ header {
 	margin-right: 10px;
 }
 
+.mt-md {
+	margin-top: 10px;
+}
+
+.mt-lg {
+	margin-top: 25px;
+}
+
 
 .main-container {
 	background-color: #212121;
@@ -199,4 +207,8 @@ a {
 
 .text-linethrough {
 	text-decoration: line-through;
+}
+
+.payout-line td {
+	border-bottom: solid #3d9c40 1px !important;
 }

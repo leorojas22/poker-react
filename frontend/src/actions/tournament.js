@@ -14,6 +14,14 @@ export function tournamentList(tournaments) {
 	}
 }
 
+export function tournamentIsLoading(status) {
+	return {
+		type: 'TOURNAMENT_LOADING',
+		status
+	}
+}
+
+
 export function savingTournament(status) {
 	return {
 		type: 'TOURNAMENT_IS_SAVING',
@@ -52,22 +60,33 @@ export function tournamentCreated(created) {
 export function loadFullTournament(tournamentID) {
 	return (dispatch) => {
 
-		Tournament.find({ id: tournamentID }).then(tournament => {
-			return dispatch(selectedTournament(tournament));
+		dispatch(tournamentIsLoading(true));
+		dispatch(selectTournamentErrors(false));
+		return Tournament.find({ id: tournamentID }).then(tournament => {
+			if(typeof tournament.id === 'undefined') {
+				return Promise.reject(["Tournament not found."]);
+			}
+
+			dispatch(selectedTournament(tournament));
+			dispatch(tournamentIsLoading(false));
+			return Promise.resolve();
 		})
 		.catch(err => {
-			return dispatch(selectTournamentErrors(err));
+			console.log(err);
+			dispatch(selectTournamentErrors(err));
+			return Promise.reject();
 		});
 	}
 }
 
-export function createTournament(tournamentObj) {
+export function saveTournament(tournamentObj) {
 	return (dispatch) => {
 
 		// Validate the information in the tournament object
 		var errors = Tournament.validate(tournamentObj);
 		if(errors.length > 0) {
-			return dispatch(tournamentErrors(errors));
+			dispatch(tournamentErrors(errors));
+			return Promise.reject(errors);
 		}
 
 		// Tournament is currently saving...
@@ -76,7 +95,9 @@ export function createTournament(tournamentObj) {
 		// Clear tournament errors
 		dispatch(tournamentErrors([]));
 		
-		return Tournament.create(tournamentObj).then(tournament => {
+		let funcName = typeof tournamentObj.id === 'undefined' ? "create" : "update";
+
+		return Tournament[funcName](tournamentObj).then(tournament => {
 
 			// Tournament finished saving
 			dispatch(savingTournament(false));

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import numeral from 'numeral';
@@ -29,14 +29,17 @@ class ViewTournamentPage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.props.selectedTournament(false);
+		//this.props.selectedTournament(false);
 	}
 
 	componentDidMount() {
 		let tournamentID = this.tournamentID;
 		console.log(this.tournamentID);
-		this.props.loadFullTournament(this.tournamentID);
-		this.props.loadPlayers(this.tournamentID)
+		if(!this.props.tournament || (this.props.tournament.id !== this.tournamentID)) {
+			this.props.selectedTournament(false);
+			this.props.loadFullTournament(this.tournamentID);
+			this.props.loadPlayers(this.tournamentID)
+		}
 	}
 
 	openAddPlayerModal() {
@@ -54,8 +57,10 @@ class ViewTournamentPage extends React.Component {
 	}
 
 	render() {
-		if(this.props.tournament) {
-
+		if(this.props.tournament && !this.props.tournamentSelectedError) {
+		
+			let playersToPay = this.props.tournament.payout_type == Tournament.PAYOUT_TYPE_PERCENTAGE ? Math.ceil(this.props.players.length * (this.props.tournament.payout_type_amount/100)) : this.props.tournament.payout_type_amount;
+		
 			return (
 				<Fragment>
 					<div className="row manage-tournament">
@@ -66,10 +71,19 @@ class ViewTournamentPage extends React.Component {
 							<TournamentInfo name="Starting Chips" value={numeral(this.props.tournament.starting_chips).format("0,0")} />
 							<TournamentInfo name="Total Entrants" value={numeral(this.props.players.length).format("0,0")} />
 							<TournamentInfo name="Prize Pool" value={numeral(this.props.players.length*this.props.tournament.buyin).format("$0,0.00")} />
+							<TournamentInfo name="Pays Top" value={numeral(playersToPay).format("0,0")+" players"} />
+							<p className="text-center mt-lg">
+								<Link to={"/tournament/"+this.tournamentID+"/edit"} className="btn btn-primary btn-sm"><i className="fa fa-pencil mr-md" />Edit Info</Link>
+							</p>
 						</div>
 						<div className="col-9">
 							<h3></h3>
-							<PlayerList isLoading={this.playerListLoading} openAddPlayerModal={this.openAddPlayerModal} players={Array.isArray(this.props.players) ? this.props.players : []} />
+							<PlayerList 
+								isLoading={this.playerListLoading} 
+								openAddPlayerModal={this.openAddPlayerModal} 
+								players={Array.isArray(this.props.players) ? this.props.players : []} 
+								playersToPay={playersToPay}
+							/>
 						</div>
 					</div>
 					<div className="row">
@@ -80,6 +94,11 @@ class ViewTournamentPage extends React.Component {
 					<PlayerModal tournamentID={this.tournamentID} />
 				</Fragment>
 			);
+		}
+		else if(this.props.tournamentSelectedError) {
+			return (
+				<Redirect to="/" />
+			)
 		}
 		else {
 			return (
@@ -99,7 +118,8 @@ const mapStateToProps = (state) => {
 		playerModalOpen		: state.tournaments.playerModalOpen,
 		playerName			: state.tournaments.playerName,
 		players				: state.tournamentPlayers.players,
-		playerListLoading	: state.tournamentPlayers.isLoading
+		playerListLoading	: state.tournamentPlayers.isLoading,
+		tournamentSelectedError: state.tournaments.tournamentSelectedError
 	}
 }
 

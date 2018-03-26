@@ -57,17 +57,17 @@ class PlayerModal extends Component {
 						""
 					}
 					<FormGroup>
-						<InputField placeholder="Player Name" name="player_name" value={this.props.playerName} />
+						<InputField autoFocus={true} tabIndex="1" placeholder="Player Name" name="player_name" value={this.props.playerName} />
 					</FormGroup>
 					{
 						this.props.modalType == "Edit" ?
 						(
 							<Fragment>
 								<FormGroup>
-									<InputField type="tel" placeholder="Chip Count" name="chip_count" value={this.props.chipCount} />
+									<InputField type="tel" tabIndex="2" placeholder="Chip Count" name="chip_count" value={this.props.chipCount} />
 								</FormGroup>
 								<FormGroup>
-									<Checkbox label="Finished" checked={this.props.playerFinished ? true : false} name="player_finished" id="player_finished" >
+									<Checkbox label="Finished" tabIndex="3" checked={this.props.playerFinished ? true : false} name="player_finished" id="player_finished" >
 									{
 										this.props.playerFinished && parseInt(this.props.chipCount) > 0 ? 
 										(
@@ -87,7 +87,7 @@ class PlayerModal extends Component {
 					}
 				</ModalBody>
 				<ModalFooter>
-					<button type="submit" className="btn btn-success" disabled={this.props.savingPlayer ? true: false}>{ this.props.savingPlayer ? (<i className="fa fa-spinner fa-spin" />) : "Save"}</button>
+					<button type="submit" className="btn btn-success" tabIndex="4" disabled={this.props.savingPlayer ? true: false}>{ this.props.savingPlayer ? (<i className="fa fa-spinner fa-spin" />) : "Save"}</button>
 				</ModalFooter>
 			</Modal>
 		);

@@ -3,8 +3,9 @@ import { Link, Redirect } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { handleFormInput } from '../../actions/forminput';
-import { createTournament, tournamentCreated } from '../../actions/tournament';
+import { saveTournament, tournamentCreated, loadFullTournament, selectTournamentErrors } from '../../actions/tournament';
 import FormGroup from '../../components/FormGroup';
+import InputField from '../../components/InputField';
 
 class CreateTournamentPage extends React.Component {
 
@@ -12,16 +13,79 @@ class CreateTournamentPage extends React.Component {
 		super(props);
 
 		this.handleSubmit = this.handleSubmit.bind(this);
+
+		this.tournamentID = this.props.match.params.tournamentID;
+	}
+
+	componentWillUnmount() {
+		this.props.setTournamentCreated(false);
+		this.props.selectTournamentErrors(false);
 	}
 
 	componentWillMount() {
 		this.props.setTournamentCreated(false);
+		this.props.selectTournamentErrors(false);
+
+		let loadedTournament = false;
+
+		if(this.tournamentID !== 'undefined' && this.props.selectedTournament.id != this.tournamentID) {
+
+			// Editing and have a different tournament loaded
+			loadedTournament = this.props.loadFullTournament(this.tournamentID);
+		}
+		else if(this.tournamentID) {
+			loadedTournament = Promise.resolve();
+		}
+
+		if(loadedTournament !== false) {
+			loadedTournament.then(() => {
+				// Populate form
+				let formValues = [
+					{
+						name: "tournament_name",
+						value: this.props.selectedTournament.name
+					},
+					{
+						name: "starting_chips",
+						value: this.props.selectedTournament.starting_chips
+					},
+					{
+						name: "buy_in",
+						value: this.props.selectedTournament.buyin
+					},
+					{
+						name: "blind_level_time",
+						value: this.props.selectedTournament.blind_level_time
+					},
+					{
+						name: "payout_type",
+						value: this.props.selectedTournament.payout_type
+					},
+					{
+						name: "payout_amount",
+						value: this.props.selectedTournament.payout_type_amount
+					}
+				];
+
+				formValues.map((field, index) => {
+					this.props.handleInput({
+						target: field
+					});
+				});
+
+			})
+			.catch(err => {
+				console.log(err);
+			})
+		}
+
+
 	}
 
 	handleSubmit(e) {
 		e.preventDefault();
 		
-		var tournament = {
+		let tournament = {
 			name				: this.props.tournamentName,
 			starting_chips		: this.props.startingChips,
 			buyin				: this.props.buyIn,
@@ -30,8 +94,15 @@ class CreateTournamentPage extends React.Component {
 			payout_type_amount	: this.props.payoutAmount
 		}
 
-		this.props.createTournament(tournament).then(tournament => {
+		if(typeof this.tournamentID !== 'undefined') {
+			tournament.id = this.tournamentID;
+		}
+
+		this.props.saveTournament(tournament).then(tournament => {
 			this.props.setTournamentCreated(true);
+		})
+		.catch(err => {
+			console.log(err);
 		});
 	}
 
@@ -42,28 +113,33 @@ class CreateTournamentPage extends React.Component {
 				<Redirect to={"/tournament/"+this.props.selectedTournament.id} />
 			);
 		}
+		else if(this.props.tournamentSelectedError) {
+			return (
+				<Redirect to="/" />
+			);
+		}
 		else {
 			return (
 				<Fragment>
-					<h1 className="page-title">Create a Tournament</h1>
+					<h1 className="page-title">{typeof this.tournamentID === 'undefined' ? "Create a" : "Edit"} Tournament</h1>
 					<form className="logged-in-form" onSubmit={this.handleSubmit} >
 						{this.props.errors.length > 0 ? (<div className="alert alert-danger">{this.props.errors.map((error, index) => (
 							<p key={index}>{error}</p>
 						))}</div>) : ""}
 						<FormGroup>
-							<input type="text" className="form-control" name="tournament_name" placeholder="Tournament Name" value={this.props.tournamentName} onChange={this.props.handleTournamentNameInput} />
+							<InputField name="tournament_name" placeholder="Tournament Name" value={this.props.tournamentName} />
 						</FormGroup>
 						<FormGroup>
-							<input type="tel" className="form-control" name="starting_chips" placeholder="Starting Chips" value={this.props.startingChips} onChange={this.props.handleStartingChipsInput} />
+							<InputField type="tel" name="starting_chips" placeholder="Starting Chips" value={this.props.startingChips} />
 						</FormGroup>
 						<FormGroup>
-							<input type="text" className="form-control" name="buy_in" placeholder="Buy In" value={this.props.buyIn} onChange={this.props.handleBuyInInput} />
+							<InputField name="buy_in" placeholder="Buy In" value={this.props.buyIn} />
 						</FormGroup>
 						<FormGroup>
-							<input type="text" className="form-control" name="blind_level_time" placeholder="Blind Level Length (in minutes)" value={this.props.blindLevelLength} onChange={this.props.handleBlindLeveLengthInput} />
+							<InputField name="blind_level_time" placeholder="Blind Level Length (in minutes)" value={this.props.blindLevelLength} />
 						</FormGroup>
 						<FormGroup>
-							<select className="form-control" name="payout_type" value={this.props.payoutType} onChange={this.props.handlePayoutTypeInput} >
+							<select className="form-control" name="payout_type" value={this.props.payoutType} onChange={this.props.handleInput} >
 								<option value="1">Payout Percentage of Players</option>
 								<option value="2">Payout Fixed Amount of Players</option>
 							</select>
@@ -71,7 +147,7 @@ class CreateTournamentPage extends React.Component {
 						<FormGroup>
 							<label>Pay Top</label>
 							<div className="input-group">
-								<input type="tel" className="form-control" name="payout_amount" placeholder="" value={this.props.payoutAmount} onChange={this.props.handlePayoutAmountInput} />
+								<InputField type="tel" name="payout_amount" placeholder="" value={this.props.payoutAmount} />
 								<div className="input-group-append">
 									<span className="input-group-text">percentage of players</span>
 								</div>	
@@ -83,7 +159,9 @@ class CreateTournamentPage extends React.Component {
 							</button>
 						</FormGroup>
 						<FormGroup className="text-center">
-							<Link to="/">Return to Tournament List</Link>
+							<Link to={typeof this.tournamentID !== 'undefined' ? "/tournament/"+this.tournamentID : "/"}>
+								Return to Tournament {typeof this.tournamentID !== 'undefined' ? "Profile" : "List"}
+							</Link>
 						</FormGroup>
 					</form>
 				</Fragment>
@@ -103,20 +181,18 @@ const mapStateToProps = (state) => {
 		errors				: state.tournamentForm.errors,
 		isSaving			: state.tournamentForm.isSaving,
 		selectedTournament	: state.tournaments.selectedTournament,
-		tournamentCreated	: state.tournamentForm.tournamentCreated
+		tournamentCreated	: state.tournamentForm.tournamentCreated,
+		tournamentIsLoading : state.tournaments.tournamentIsLoading
 	}
 }
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		handleTournamentNameInput	: (field) => dispatch(handleFormInput(field)),
-		handleStartingChipsInput	: (field) => dispatch(handleFormInput(field)),
-		handleBuyInInput			: (field) => dispatch(handleFormInput(field)),
-		handleBlindLeveLengthInput	: (field) => dispatch(handleFormInput(field)),
-		handlePayoutTypeInput		: (field) => dispatch(handleFormInput(field)),
-		handlePayoutAmountInput		: (field) => dispatch(handleFormInput(field)),
-		createTournament			: (obj) => dispatch(createTournament(obj)),
-		setTournamentCreated		: (status) => dispatch(tournamentCreated(status))
+		handleInput				: (field) => dispatch(handleFormInput(field)),
+		saveTournament			: (obj) => dispatch(saveTournament(obj)),
+		setTournamentCreated	: (status) => dispatch(tournamentCreated(status)),
+		loadFullTournament		: (tournamentID) => dispatch(loadFullTournament(tournamentID)),
+		selectTournamentErrors	: (errs) => dispatch(selectTournamentErrors(errs))
 	}
 }
 
