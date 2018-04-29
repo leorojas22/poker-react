@@ -70,3 +70,20 @@ export function tournamentIsLoading(state = false, action) {
 	}
 }
 
+export function tournamentStarting(state = false, action) {
+	switch(action.type) {
+		case 'TOURNAMENT_STARTED':
+			return action.status;
+		default:
+			return state;
+	}
+}
+
+export function tournamentTimeElapsed(state = 0, action) {
+	switch(action.type) {
+		case 'TOURNAMENT_TIME_ELAPSED':
+			return action.time;
+		default:
+			return state;
+	}
+}

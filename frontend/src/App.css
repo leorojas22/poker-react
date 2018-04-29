@@ -212,3 +212,32 @@ a {
 .payout-line td {
 	border-bottom: solid #3d9c40 1px !important;
 }
+
+.bg-purple {
+	background-color: #6034b1;
+	border-color: #6a3bc1;
+	color: white;
+}
+
+.bg-purple:hover {
+	color: white;
+	background-color: #552e9c;
+}
+
+.bg-green {
+	background-color: #006c03;
+	border-color: #008304;
+	color: white;
+}
+
+.bg-green:hover {
+	color: white;
+	background-color: #015a03;
+	border-color: #006c03;
+}
+
+.tournament-clock {
+	border-bottom: dotted #6f6f6f 1px;
+	margin-bottom: 20px;
+	padding-bottom: 3px;
+}

@@ -18,7 +18,9 @@ import {
 	tournamentErrors,
 	tournamentCreated,
 	tournamentIsLoading,
-	tournamentSelectedError
+	tournamentSelectedError,
+	tournamentStarting,
+	tournamentTimeElapsed
 } from './tournament';
 
 import {
@@ -48,12 +50,14 @@ const loginPageState = combineReducers({
 });
 
 const tournamentsState = combineReducers({
-	listLoading			: tournamentListLoading,
-	list				: tournamentList,
-	selectedTournament	: tournamentSelected,
-	playerModalOpen		: toggleModal("playerModal"),
-	tournamentIsLoading	: tournamentIsLoading,
-	tournamentSelectedError : tournamentSelectedError
+	listLoading				: tournamentListLoading,
+	list					: tournamentList,
+	selectedTournament		: tournamentSelected,
+	playerModalOpen			: toggleModal("playerModal"),
+	tournamentIsLoading		: tournamentIsLoading,
+	tournamentSelectedError : tournamentSelectedError,
+	tournamentStarting		: tournamentStarting,
+	tournamentTimeElapsed	: tournamentTimeElapsed
 });
 
 const tournamentFormState = combineReducers({

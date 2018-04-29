@@ -94,8 +94,48 @@ class Tournament extends BaseModel {
 			'time_elapsed',
 			'payout_type',
 			'payout_type_amount',
-			'deleted'
+			'deleted',
+			'start'
 		];
+	}
+
+	set start(status) {
+
+		let currentTime = new Date();
+		this.started 	= typeof this.started === 'undefined' ? null : this.started;
+		this.paused 	= typeof this.paused === 'undefined' ? null : this.paused;
+		if(status) {
+
+			// Set official start time
+			if(!this.started) {
+				this.started = currentTime;
+			}
+			console.log("STARTED?");
+
+			if(this.paused) {
+				this.last_start_time = currentTime;
+			}
+
+			this.paused = null;
+		}
+		else if(!status && this.started && !this.paused) {
+			this.paused = currentTime;
+			console.log("PAUSED?");
+			// Figure out the elapsed time
+			let currentElapsedTime 	= typeof this.time_elapsed !== 'undefined' ? this.time_elapsed : 0;
+			let lastStartTime 		= (new Date(this.last_start_time)).getTime();
+			this.time_elapsed  		= currentElapsedTime + (Math.round((Date.now() - lastStartTime)/1000));
+		}
+		else {
+			console.log(status);
+		}
+	}
+
+	set lastStartTime(time) {
+		let currentElapsedTime = typeof this.time_elapsed !== 'undefined' ? this.time_elapsed : 0;
+		if(typeof this.last_start_time !== 'undefined' && this.last_start_time) {
+			// Figure out new elapsed time
+		}
 	}
 
 	toJson() {
@@ -105,7 +145,7 @@ class Tournament extends BaseModel {
 			name				: this.name,
 			starting_chips		: this.starting_chips,
 			buyin				: this.buyin,
-			started				: typeof this.started !== 'undefined' ? this.completed : false,
+			started				: typeof this.started !== 'undefined' ? this.started : false,
 			completed			: typeof this.completed !== 'undefined' ? this.completed : false,
 			last_start_time		: typeof this.last_start_time !== 'undefined' ? this.last_start_time : null,
 			paused				: typeof this.paused !== 'undefined' ? this.paused : false,

@@ -64,16 +64,6 @@ class PlayerList extends Component {
 		let props = this.props;
 		return (
 			<Fragment>
-				{
-					props.players.length > 0 ? 
-					(
-						<div className="d-flex flex-row-reverse">
-							<a tabIndex="1" className="btn btn-primary" onClick={props.openAddPlayerModal}>Add a Player</a>
-						</div>
-					)
-					: ""
-				}
-				
 				<h3>Player List</h3>
 				{
 					props.isLoading ? (<p className="text-center"><i className="fa fa-spinner fa-spin mr-md" /> Loading...</p>) : ""

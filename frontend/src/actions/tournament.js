@@ -57,6 +57,20 @@ export function tournamentCreated(created) {
 	}
 }
 
+export function tournamentStarting(status) {
+	return {
+		type: 'TOURNAMENT_STARTED',
+		status
+	}
+}
+
+export function updateTimeElapsed(time) {
+	return {
+		type: 'TOURNAMENT_TIME_ELAPSED',
+		time
+	}
+}
+
 export function loadFullTournament(tournamentID) {
 	return (dispatch) => {
 
@@ -69,7 +83,7 @@ export function loadFullTournament(tournamentID) {
 
 			dispatch(selectedTournament(tournament));
 			dispatch(tournamentIsLoading(false));
-			return Promise.resolve();
+			return Promise.resolve(tournament);
 		})
 		.catch(err => {
 			console.log(err);
@@ -98,7 +112,6 @@ export function saveTournament(tournamentObj) {
 		let funcName = typeof tournamentObj.id === 'undefined' ? "create" : "update";
 
 		return Tournament[funcName](tournamentObj).then(tournament => {
-
 			// Tournament finished saving
 			dispatch(savingTournament(false));
 

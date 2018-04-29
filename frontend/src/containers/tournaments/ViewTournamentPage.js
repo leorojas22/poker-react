@@ -10,10 +10,10 @@ import Tournament from '../../models/Tournament'
 import TournamentInfo from '../../components/tournaments/TournamentInfo';
 import PlayerList from '../../components/tournaments/PlayerList';
 import PlayerModal from '../../components/tournaments/PlayerModal';
-
+import TournamentClock from '../../components/tournaments/TournamentClock';
 
 // Actions
-import { loadFullTournament, selectedTournament } from '../../actions/tournament';
+import { loadFullTournament, selectedTournament, saveTournament, tournamentStarting, updateTimeElapsed } from '../../actions/tournament';
 import { handleFormInput } from '../../actions/forminput';
 import { setPlayerModalType, loadPlayers, togglePlayerModal } from '../../actions/tournamentPlayer';
 
@@ -24,8 +24,15 @@ class ViewTournamentPage extends React.Component {
 		super(props);
 		console.log(props);
 
-		this.openAddPlayerModal 		= this.openAddPlayerModal.bind(this);
+		this.openAddPlayerModal = this.openAddPlayerModal.bind(this);
+		this.toggleTournamentStart = this.toggleTournamentStart.bind(this);
+
 		this.tournamentID = this.props.match.params.tournamentID;
+
+		this.startingTournament = false;
+
+		this.clockInterval = null;
+
 	}
 
 	componentWillMount() {
@@ -34,10 +41,15 @@ class ViewTournamentPage extends React.Component {
 
 	componentDidMount() {
 		let tournamentID = this.tournamentID;
+		let self = this;
 		console.log(this.tournamentID);
 		if(!this.props.tournament || (this.props.tournament.id !== this.tournamentID)) {
 			this.props.selectedTournament(false);
-			this.props.loadFullTournament(this.tournamentID);
+			this.props.loadFullTournament(this.tournamentID).then((tournament) => {
+				if(tournament.started) {
+					self.startClock();
+				}
+			})
 			this.props.loadPlayers(this.tournamentID)
 		}
 	}
@@ -54,6 +66,52 @@ class ViewTournamentPage extends React.Component {
 		
 		this.props.setPlayerModalType("Add");
 		props.togglePlayerModal(true, "playerModal");
+	}
+
+	startClock() {
+		let props = this.props;
+		this.clockInterval = window.setInterval(function() {
+			// Update time elapsed
+			let elapsedTime = props.tournament.time_elapsed;
+			if(!props.tournament.paused) {
+				elapsedTime += Math.round((Date.now() - (new Date(props.tournament.last_start_time)).getTime())/1000);	
+			}
+
+			props.updateTimeElapsed(elapsedTime);
+
+		}, 1000);
+	}
+	
+	pauseClock() {
+		window.clearInterval(this.clockInterval);
+	}
+
+	toggleTournamentStart() {
+		var self = this;
+
+
+		let statusToSet = this.props.tournament.paused ? true : false;
+
+		let tournament = {
+			id				: this.props.tournament.id,
+			start			: statusToSet
+		}
+
+		this.props.setStartStatus(true);
+		this.props.saveTournament(tournament).then((tournament) => {
+			this.props.setStartStatus(false);
+			if(statusToSet) {
+				this.startClock();
+			}
+			else {
+				this.pauseClock();
+			}
+		})
+		.catch((err) => {
+			console.log("ERROR");
+			console.log(err);
+			this.props.setStartStatus(false);
+		})
 	}
 
 	render() {
@@ -78,6 +136,45 @@ class ViewTournamentPage extends React.Component {
 						</div>
 						<div className="col-9">
 							<h3></h3>
+							<TournamentClock timeElapsed={this.props.tournamentTimeElapsed} blindLevelTime={this.props.tournament.blind_level_time} />
+							<div className="d-flex flex-row-reverse">
+							{
+								this.props.players.length > 0 ? 
+								(
+									
+									<a tabIndex="2" className="btn btn-primary" onClick={this.openAddPlayerModal}>Add a Player</a>
+									
+								)
+								: ""
+							}
+							
+							{
+								!this.props.tournament.started || this.props.tournament.paused ?
+								(
+									<button tabIndex="1" onClick={this.toggleTournamentStart} className="btn bg-green mr-md" disabled={this.props.tournamentStarting ? true : false }>
+										{
+											this.props.tournamentStarting ? 
+											(this.props.paused ? "Resuming..." : "Starting...")
+											: 
+											(this.props.paused ? "Resume" : "Start")
+										}
+									</button>
+								)
+								:
+								""
+							}
+							{
+								this.props.tournament.started && !this.props.tournament.paused ?
+								(
+									<button tabIndex="1" onClick={this.toggleTournamentStart} className="btn bg-green mr-md" disabled={this.props.tournamentStarting ? true : false }>
+										{this.props.tournamentStarting ? "Pausing..." : "Pause"}
+									</button>
+								)
+								:
+								""
+							}
+
+							</div>
 							<PlayerList 
 								isLoading={this.playerListLoading} 
 								openAddPlayerModal={this.openAddPlayerModal} 
@@ -112,14 +209,15 @@ class ViewTournamentPage extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	console.log(state);
 	return {
 		tournament			: state.tournaments.selectedTournament,
 		playerModalOpen		: state.tournaments.playerModalOpen,
 		playerName			: state.tournaments.playerName,
 		players				: state.tournamentPlayers.players,
 		playerListLoading	: state.tournamentPlayers.isLoading,
-		tournamentSelectedError: state.tournaments.tournamentSelectedError
+		tournamentSelectedError: state.tournaments.tournamentSelectedError,
+		tournamentStarting	: state.tournaments.tournamentStarting,
+		tournamentTimeElapsed : state.tournaments.tournamentTimeElapsed
 	}
 }
 
@@ -130,7 +228,10 @@ const mapDispatchToProps = (dispatch) => {
 		handleFormInput			: (field) => dispatch(handleFormInput(field)),
 		loadPlayers				: (tournamentID) => dispatch(loadPlayers(tournamentID)),
 		setPlayerModalType		: (type) => dispatch(setPlayerModalType(type)),
-		selectedTournament		: (tournament) => dispatch(selectedTournament(tournament))
+		selectedTournament		: (tournament) => dispatch(selectedTournament(tournament)),
+		saveTournament			: (tournament) => dispatch(saveTournament(tournament)),
+		setStartStatus		: (status) => dispatch(tournamentStarting(status)),
+		updateTimeElapsed	: (time) => dispatch(updateTimeElapsed(time))
 	}
 }
 
